@@ -111,7 +111,7 @@ var github_user_repos = function(username, callback, page_number, prev_data) {
         }
     });*/
     repo_callback = callback;
-    current_page = page_number;
+    current_page = page;
     current_data = data;
     $.ajax({
         url: url,
