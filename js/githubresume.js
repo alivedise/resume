@@ -22,7 +22,7 @@ function repo_jsonp(result) {
   console.log(result.data);
   current_data = current_data.concat(result.data);
   if (result.data.length > 0) {
-    github_user_repos(username, repo_callback, current_page + 1, data);
+    github_user_repos(username, repo_callback, current_page + 1, current_data);
   } else {
     repo_callback(current_data);
   }
