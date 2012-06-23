@@ -2,6 +2,13 @@ var urlParams = {};
 var username;
 var trackerId = 'UA-21222559-1';
 
+var current_callback = null;
+
+function jsonp(result) {
+  console.log(result.data);
+  current_callback(result.data);
+};
+
 (function () {
     var e,
         a = /\+/g,  // Regex for replacing addition symbol with a space
@@ -54,7 +61,12 @@ var home = function() {
 };
 
 var github_user = function(username, callback) {
-    $.getJSON('https://api.github.com/users/' + username, callback);
+    //$.getJSON('https://api.github.com/users/' + username, callback);
+    current_callback = callback;
+    $.ajax({
+        url: 'https://api.github.com/users/' + username + '?callback=jsonp',
+        dataType: 'jsonp'
+    });  
 }
 
 var github_user_repos = function(username, callback, page_number, prev_data) {
