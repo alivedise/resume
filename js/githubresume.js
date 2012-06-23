@@ -77,7 +77,11 @@ var github_user = function(username, callback) {
     current_callback = callback;
     $.ajax({
         url: 'https://api.github.com/users/' + username + '?callback=jsonp',
-        dataType: 'jsonp'
+        dataType: 'jsonp',
+        jsonp: 'jsonp',
+        data: {
+          callback: 'jsonp'
+        }
     });  
 }
 
@@ -104,7 +108,11 @@ var github_user_repos = function(username, callback, page_number, prev_data) {
     current_data = data;
     $.ajax({
         url: url,
-        dataType: 'jsonp'
+        dataType: 'jsonp',
+        jsonp: 'repo_jsonp',
+        data: {
+          callback: 'repo_jsonp'
+        }
     });
 }
 
@@ -112,7 +120,11 @@ var github_user_orgs = function(username, callback) {
     current_callback = callback;
     $.ajax({
         url: 'https://api.github.com/users/' + username + '/orgs?callback=jsonp',
-        dataType: 'jsonp'
+        dataType: 'jsonp',
+        jsonp: 'jsonp',
+        data: {
+          callback: 'jsonp'
+        }
     });  
 }
 
