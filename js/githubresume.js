@@ -2,27 +2,29 @@ var urlParams = {};
 var username;
 var trackerId = 'UA-21222559-1';
 
-var current_callback = null;
+var user_callback = null;
+var org_callback = null;
+var repo_callback = null;
 var current_data = [];
 var current_page = 1;
 
 function jsonp(result) {
   console.log(result.data);
-  current_callback(result.data);
+  user_callback(result.data);
 };
 
 function org_jsonp(result) {
   console.log(result.data);
-  current_callback(result.data);
+  org_callback(result.data);
 };
 
 function repo_jsonp(result) {
   console.log(result.data);
   current_data = current_data.concat(result.data);
   if (result.data.length > 0) {
-    github_user_repos(username, current_callback, current_page + 1, data);
+    github_user_repos(username, repo_callback, current_page + 1, data);
   } else {
-    current_callback(current_data);
+    repo_callback(current_data);
   }
 };
 
@@ -79,7 +81,7 @@ var home = function() {
 
 var github_user = function(username, callback) {
     //$.getJSON('https://api.github.com/users/' + username, callback);
-    current_callback = callback;
+    user_callback = callback;
     $.ajax({
         url: 'https://api.github.com/users/' + username + '?callback=jsonp',
         dataType: 'jsonp',
@@ -108,7 +110,7 @@ var github_user_repos = function(username, callback, page_number, prev_data) {
             callback(data);
         }
     });*/
-    current_callback = callback;
+    repo_callback = callback;
     current_page = page_number;
     current_data = data;
     $.ajax({
@@ -122,7 +124,7 @@ var github_user_repos = function(username, callback, page_number, prev_data) {
 }
 
 var github_user_orgs = function(username, callback) {
-    current_callback = callback;
+    org_callback = callback;
     $.ajax({
         url: 'https://api.github.com/users/' + username + '/orgs?callback=org_jsonp',
         dataType: 'jsonp',
