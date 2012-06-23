@@ -3,10 +3,22 @@ var username;
 var trackerId = 'UA-21222559-1';
 
 var current_callback = null;
+var current_data = [];
+var current_page = 1;
 
 function jsonp(result) {
   console.log(result.data);
   current_callback(result.data);
+};
+
+function repo_jsonp(result) {
+  console.log(result.data);
+  current_data = current_data.concat(result.data);
+  if (result.data.length > 0) {
+    github_user_repos(username, callback, current_page + 1, data);
+  } else {
+    current_callback(current_data);
+  }
 };
 
 (function () {
@@ -75,20 +87,33 @@ var github_user_repos = function(username, callback, page_number, prev_data) {
         data = (prev_data ? prev_data : []);
 
     if (page_number > 1) {
-      url += '?page=' + page_number;
+      url += '?page=' + page_number+'&callback=repo_jsonp';
+    } else {
+      url += '?callback=repo_jsonp';
     }
-    $.getJSON(url, function(repos) {
+    /*$.getJSON(url, function(repos) {
         data = data.concat(repos);
         if (repos.length > 0) {
             github_user_repos(username, callback, page + 1, data);
         } else {
             callback(data);
         }
+    });*/
+    current_callback = callback;
+    current_page = page_number;
+    current_data = data;
+    $.ajax({
+        url: url,
+        dataType: 'jsonp'
     });
 }
 
 var github_user_orgs = function(username, callback) {
-    $.getJSON('https://api.github.com/users/' + username + '/orgs', callback);
+    current_callback = callback;
+    $.ajax({
+        url: 'https://api.github.com/users/' + username + '/orgs?callback=jsonp',
+        dataType: 'jsonp'
+    });  
 }
 
 var run = function() {
