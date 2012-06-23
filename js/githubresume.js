@@ -11,6 +11,11 @@ function jsonp(result) {
   current_callback(result.data);
 };
 
+function org_jsonp(result) {
+  console.log(result.data);
+  current_callback(result.data);
+};
+
 function repo_jsonp(result) {
   console.log(result.data);
   current_data = current_data.concat(result.data);
@@ -119,11 +124,11 @@ var github_user_repos = function(username, callback, page_number, prev_data) {
 var github_user_orgs = function(username, callback) {
     current_callback = callback;
     $.ajax({
-        url: 'https://api.github.com/users/' + username + '/orgs?callback=jsonp',
+        url: 'https://api.github.com/users/' + username + '/orgs?callback=org_jsonp',
         dataType: 'jsonp',
-        jsonp: 'jsonp',
+        jsonp: 'org_jsonp',
         data: {
-          callback: 'jsonp'
+          callback: 'org_jsonp'
         }
     });  
 }
