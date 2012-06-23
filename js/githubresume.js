@@ -190,9 +190,9 @@ var run = function() {
             popularity;
 
         data.forEach(function(elm, i, arr) {
-            //if (arr[i].fork !== false) {
-            //    return;
-            //}
+            if (arr[i].fork !== false) {
+                return;
+            }
 
             if (arr[i].language) {
                 if (arr[i].language in languages) {
